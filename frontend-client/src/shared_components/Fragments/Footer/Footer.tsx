@@ -1,6 +1,6 @@
 import styles from "./Footer.module.scss";
 import github_logo from "../../../assets/github_logo.png";
-import linkedin_logo from "../../../assets//linkedin_logo.png";
+import linkedin_logo from "../../../assets/linkedin_logo.png";
 
 const Footer = () => {
   return (
@@ -11,10 +11,10 @@ const Footer = () => {
           href="https://www.linkedin.com/in/georgi-grigorov-ba82271b5/"
           role="button"
         >
-          <img src={linkedin_logo} alt="linked_image" height="40" width="40" />
+          <img src={linkedin_logo.src} alt="linked_image" height="40" width="40" />
         </a>
         <a href="https://github.com/Grigorov-Georgi" role="button">
-          <img src={github_logo} alt="github_image" height="35" width="35" />
+          <img src={github_logo.src} alt="github_image" height="35" width="35" />
         </a>
       </div>
     </footer>

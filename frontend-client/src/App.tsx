@@ -2,7 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ErrorComponent } from "./shared_components/ErrorComponent/ErrorComponent";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
+import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
 import LoadingOverlay from "./shared_components/LoadingOverlay/LoadingOverlay";
 import ContactPage from "./pages/ContactPage/ContactPage";
 import Home from "./pages/HomePage/Home";
@@ -66,11 +66,20 @@ function App() {
 
   return (
     <div>
+    <Auth0Provider
+      domain={`${process.env.NEXT_DOMAIN}`}
+      clientId={`${process.env.NEXT_CLIENTID}`}
+      authorizationParams={{
+        audience: process.env.NEXT_AUDIENCE,
+        redirect_uri: window.location.origin,
+      }}
+    >
       <QueryClientProvider client={queryClient}>
         <LoadingOverlay>
           <RouterProvider router={router} />
         </LoadingOverlay>
       </QueryClientProvider>
+      </Auth0Provider>
     </div>
   );
 }

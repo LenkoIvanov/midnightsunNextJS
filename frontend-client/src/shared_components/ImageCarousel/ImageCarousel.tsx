@@ -9,7 +9,7 @@ const ImageCarousel = (props: ImageCarouselProps) => {
   const { imgSrcs } = props;
 
   const itemTemplate = (imageSrc: string) => {
-    return <img src={imageSrc} className={styles.image} />;
+    return <img src={imageSrc} className={styles.image} />; // TODO -> Possible issue with migration?
   };
   return (
     <div>

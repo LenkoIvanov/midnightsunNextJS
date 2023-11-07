@@ -27,7 +27,7 @@ export const ProductCard = (props: { allInfo: ProductFullInfo }) => {
 
   return (
     <div className={styles.card}>
-      <img src={placeholderImg} alt="Image of name" className={styles.image} />
+      <img src={placeholderImg.src} alt="Image of name" className={styles.image} />
       <div className={styles.nameReviewContainer}>
         <div className={styles.productName}>{allInfo.name}</div>
         <div>{allInfo.rating}/5</div>

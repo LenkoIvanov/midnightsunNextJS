@@ -27,7 +27,7 @@ export const OrderItem = (props: OrderItemProps) => {
   return (
     <div className={styles.orderItem}>
       <img
-        src={placeholderImage}
+        src={placeholderImage.src}
         alt="Product image"
         className={styles.image}
       />
