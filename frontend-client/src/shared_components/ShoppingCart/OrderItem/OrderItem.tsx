@@ -1,5 +1,5 @@
 import styles from "./OrderItem.module.scss";
-import placeholderImage from "../../../assets/2-2-space-free-png-image.png";
+import placeholderImage from "../../../../public/assets/2-2-space-free-png-image.png";
 import { InputNumber } from "primereact/inputnumber";
 import { FcEmptyTrash } from "react-icons/fc";
 import { useCartStore } from "../../../stores/CartStore";

@@ -1,6 +1,6 @@
 import { Button } from "primereact/button";
 import styles from "./ProductCard.module.scss";
-import placeholderImg from "../../../assets/2-2-space-free-png-image.png";
+import placeholderImg from "../../../../public/assets/2-2-space-free-png-image.png"
 import { useCartStore } from "../../../stores/CartStore";
 import { IOrderItem } from "../../../types/IOrderItem";
 import { ProductFullInfo } from "../../../types/FullProductInfo";

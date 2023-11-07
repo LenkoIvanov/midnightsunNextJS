@@ -1,7 +1,7 @@
 import style from "./Home.module.scss";
-import img1 from "../../assets/summer_sale.png";
-import img2 from "../../assets/syber_sale.png";
-import img3 from "../../assets/telescope_sale.png";
+import img1 from "../../../public/assets/summer_sale.png"
+import img2 from "../../../public/assets/syber_sale.png"
+import img3 from "../../../public/assets/telescope_sale.png";
 import ImageCarousel from "../../shared_components/ImageCarousel/ImageCarousel";
 import { useQuery } from "@tanstack/react-query";
 import { getTopProducts } from "../../services/ProductService";
