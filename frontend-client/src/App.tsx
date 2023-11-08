@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ErrorComponent } from "./shared_components/ErrorComponent/ErrorComponent";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -10,44 +11,49 @@ import { AllProducts } from "./pages/ProductsPage/AllProducts";
 import { NewProductForm } from "./pages/NewProductPage/NewProductForm";
 import ShoppingCart from "./pages/ShoppingCartPage/ShoppingCart";
 import AppFrame from "./pages/AppFrame/AppFrame";
+import { Navbar } from "./shared_components/Fragments/Navbar/Navbar";
+import Footer from "./shared_components/Fragments/Footer/Footer";
+import "primereact/resources/themes/saga-blue/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <AppFrame />,
-    errorElement: <ErrorComponent isPathRelated={true} />,
-    children: [
-      {
-        path: "/",
-        element: <Home />,
-        errorElement: <ErrorComponent isPathRelated={true} />,
-      },
-      {
-        path: "/products",
-        element: <AllProducts />,
-        errorElement: <ErrorComponent isPathRelated={false} />,
-      },
-      {
-        path: "/addProduct",
-        element: <NewProductForm />,
-        errorElement: <ErrorComponent isPathRelated={false} />,
-      },
-      {
-        path: "/contacts",
-        element: <ContactPage />,
-      },
-      {
-        path: "/shoppingCart",
-        element: <ShoppingCart />,
-        errorElement: <ErrorComponent isPathRelated={false} />,
-      },
-      {
-        path: "/userPage",
-        element: <div>Account</div>,
-      },
-    ],
-  },
-]);
+// const router = createBrowserRouter([
+//   {
+//     path: "/",
+//     element: <AppFrame />,
+//     errorElement: <ErrorComponent isPathRelated={true} />,
+//     children: [
+//       {
+//         path: "/",
+//         element: <Home />,
+//         errorElement: <ErrorComponent isPathRelated={true} />,
+//       },
+//       {
+//         path: "/products",
+//         element: <AllProducts />,
+//         errorElement: <ErrorComponent isPathRelated={false} />,
+//       },
+//       {
+//         path: "/addProduct",
+//         element: <NewProductForm />,
+//         errorElement: <ErrorComponent isPathRelated={false} />,
+//       },
+//       {
+//         path: "/contacts",
+//         element: <ContactPage />,
+//       },
+//       {
+//         path: "/shoppingCart",
+//         element: <ShoppingCart />,
+//         errorElement: <ErrorComponent isPathRelated={false} />,
+//       },
+//       {
+//         path: "/userPage",
+//         element: <div>Account</div>,
+//       },
+//     ],
+//   },
+// ]);
 
 const queryClient = new QueryClient();
 
@@ -67,16 +73,19 @@ function App() {
   return (
     <div>
     <Auth0Provider
-      domain={`${process.env.NEXT_DOMAIN}`}
-      clientId={`${process.env.NEXT_CLIENTID}`}
+      domain={`${process.env.NEXT_PUBLIC_DOMAIN}`}
+      clientId={`${process.env.NEXT_PUBLIC_CLIENTID}`}
       authorizationParams={{
-        audience: process.env.NEXT_AUDIENCE,
+        audience: process.env.NEXT_PUBLIC_AUDIENCE,
         redirect_uri: window.location.origin,
       }}
     >
       <QueryClientProvider client={queryClient}>
         <LoadingOverlay>
-          <RouterProvider router={router} />
+          <Navbar />
+          {/* <RouterProvider router={router} /> */}
+          <Home />
+          <Footer />
         </LoadingOverlay>
       </QueryClientProvider>
       </Auth0Provider>

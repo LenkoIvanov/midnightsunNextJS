@@ -1,6 +1,6 @@
 import styles from "./Footer.module.scss";
-import github_logo from "../../../public/assets/github_logo.png";
-import linkedin_logo from "../../../public/assets/linkedin_logo.png";
+import github_logo from "../../../../public/assets/github_logo.png"
+import linkedin_logo from "../../../../public/assets/linkedin_logo.png";
 
 const Footer = () => {
   return (

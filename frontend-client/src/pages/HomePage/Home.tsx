@@ -16,7 +16,7 @@ const Home = () => {
   return (
     <div className={style.homePage}>
       <h1>Welcome to Ecart!</h1>
-      <ImageCarousel imgSrcs={[img1, img2, img3]} />
+      <ImageCarousel imgSrcs={[img1.src, img2.src, img3.src]} />
       <h2>Our users recommend: </h2>
       <div className={style.topGrid}>
         {isSuccess &&
