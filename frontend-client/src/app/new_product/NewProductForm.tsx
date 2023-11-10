@@ -13,7 +13,7 @@ import { createProduct } from "../../services/ProductService";
 import { NewProduct } from "../../types/NewProduct";
 import { Category } from "../../types/Category";
 
-export const NewProductForm = () => {
+const NewProductForm = () => {
   const [name, setName] = useState<string>("");
   const [price, setPrice] = useState<number | null>(null);
   const [quantity, setQuantity] = useState<number | null>(null);
@@ -140,3 +140,5 @@ export const NewProductForm = () => {
     </div>
   );
 };
+
+export default NewProductForm;

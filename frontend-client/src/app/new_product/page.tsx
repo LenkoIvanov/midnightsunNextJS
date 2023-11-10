@@ -2,8 +2,8 @@
  
 import dynamic from 'next/dynamic';
  
-const Home = dynamic(() => import('./home/Home'), { ssr: false }); //disable ssr for now
+const NewProduct = dynamic(() => import('./NewProductForm'), { ssr: false }); //disable ssr for now
  
 export default function Page() {
-  return <Home />;
+  return <NewProduct />;
 }

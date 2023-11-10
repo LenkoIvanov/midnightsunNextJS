@@ -7,7 +7,7 @@ import { ProductCard } from "../../shared_components/ProductComponents/ProductCa
 import { useSearchParams } from "react-router-dom";
 
 //TODO: Handle errors via toasts and add a isError case to the application!
-export const AllProducts = () => {
+const AllProducts = () => {
   const [first, setFirst] = useState<number>(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = searchParams.get("page");
@@ -47,3 +47,5 @@ export const AllProducts = () => {
     </div>
   );
 };
+
+export default AllProducts;

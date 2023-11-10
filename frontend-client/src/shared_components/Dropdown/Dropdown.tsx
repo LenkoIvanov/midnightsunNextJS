@@ -9,7 +9,7 @@ interface DropdownProps {
 
 const dpdOptions = [
   { name: "All products", path: "/products" },
-  { name: "Add new product", path: "/addProduct" },
+  { name: "Add new product", path: "/new_product" },
 ];
 
 export const Dropdown = (props: DropdownProps) => {

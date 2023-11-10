@@ -27,7 +27,7 @@ export const Navbar = () => {
         <FiPhone />
         Contacts
       </a>
-      <a href="/shoppingCart" className={styles.link}>
+      <a href="/shopping_cart" className={styles.link}>
         <AiOutlineShoppingCart />
         Shopping cart
       </a>
