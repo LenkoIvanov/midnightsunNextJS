@@ -7,11 +7,11 @@ import { FileUpload, FileUploadUploadEvent } from "primereact/fileupload";
 import styles from "./NewProductForm.module.scss";
 import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useAuth0 } from "@auth0/auth0-react";
 import { getAllCategories } from "../../services/CategoryService";
 import { createProduct } from "../../services/ProductService";
 import { NewProduct } from "../../types/NewProduct";
 import { Category } from "../../types/Category";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 const NewProductForm = () => {
   const [name, setName] = useState<string>("");
@@ -20,11 +20,11 @@ const NewProductForm = () => {
   const [description, setDescription] = useState<string>("");
   const [selectedOption, setSelectedOption] = useState<number>(-1);
 
-  const { isAuthenticated } = useAuth0();
+  const { user } = useUser();
 
   const categoriesQuery = useQuery({
     queryKey: ["categories"],
-    queryFn: () => getAllCategories(isAuthenticated),
+    queryFn: () => getAllCategories(user !== undefined),
   });
 
   const newProductMutation = useMutation({
@@ -33,7 +33,7 @@ const NewProductForm = () => {
 
   const loadCategories = (): Category[] => {
     let categories: Category[] = [];
-    if (categoriesQuery.status === "success" && isAuthenticated) {
+    if (categoriesQuery.status === "success" && user !== undefined) {
       categories = categoriesQuery.data.content?.map(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (el: any) => {

@@ -2,18 +2,18 @@
 import { Button } from "primereact/button";
 import styles from "./ShoppingCart.module.scss";
 import { useCartStore } from "../../stores/CartStore";
-import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation } from "@tanstack/react-query";
 import { NewOrderItem } from "../../types/NewOrderItem";
 import { createNewOrder } from "../../services/OrderService";
 import OrderItem from "../../shared_components/ShoppingCart/OrderItem/OrderItem";
 import OrderInfo from "../../shared_components/ShoppingCart/OrderInfo/OrderInfo";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 export const ShoppingCart = () => {
   const itemsInCart = useCartStore((state) => state.orderItems);
   const getOrderItems = useCartStore((state) => state.generateItemsForOrder);
   const resetStore = useCartStore((state) => state.resetStore);
-  const { isAuthenticated } = useAuth0();
+  const { user } = useUser();
 
   const newOrderMutation = useMutation({
     mutationFn: (newOrderItems: NewOrderItem[]) =>
@@ -52,7 +52,7 @@ export const ShoppingCart = () => {
         <Button
           label={"Order"}
           className={`${styles.orderBtn}`}
-          disabled={!isAuthenticated}
+          disabled={user === undefined}
           onClick={handleOrderClick}
         />
       </div>

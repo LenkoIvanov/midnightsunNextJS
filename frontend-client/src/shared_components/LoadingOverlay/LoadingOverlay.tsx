@@ -1,11 +1,11 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import { ErrorComponent } from "../ErrorComponent/ErrorComponent";
 import { ProgressSpinner } from "primereact/progressspinner";
 import styles from "./LoadingOverlay.module.scss";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const LoadingOverlay = ({ children }: any) => {
-  const { isLoading, error } = useAuth0();
+  const { isLoading, error } = useUser();
 
   if (error) return <ErrorComponent isPathRelated={false} />;
 

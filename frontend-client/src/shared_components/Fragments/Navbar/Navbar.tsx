@@ -4,15 +4,10 @@ import styles from "./Navbar.module.scss";
 import { AiOutlineHome, AiOutlineShoppingCart } from "react-icons/ai";
 import { FiPhone } from "react-icons/fi";
 import { Dropdown } from "../../Dropdown/Dropdown";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 export const Navbar = () => {
-  const { isAuthenticated, logout, loginWithRedirect } = useAuth0();
-
-  const handleLogOut = () => {
-    logout({logoutParams: { returnTo: window.location.origin}});
-    sessionStorage.clear();
-  }
+  const { user } = useUser();
 
   return (
     <div className={styles.nav}>
@@ -35,16 +30,12 @@ export const Navbar = () => {
         <AiOutlineUser />
         Account
   </a> */}
-      <div
+      <a
         className={`${styles.link} ${styles.divLink}`}
-        onClick={() =>
-          !isAuthenticated
-            ? loginWithRedirect()
-            : handleLogOut()
-        }
+        href={`${user !== undefined ? "/api/auth/logout" : "/api/auth/login"}`}
       >
-        {`${isAuthenticated ? "Log out" : "Log in"}`}
-      </div>
+        {`${user !== undefined ? "Logout" : "Login"}`}
+      </a>
     </div>
   );
 };
