@@ -6,6 +6,9 @@
   --ecart-btn-bg-hover: #c06ff3;
   --ecart-border-color: blueviolet;
   --ecart-empty-btn-color: #e9ecef;
+  height: 100%;
+  width: 100%;
+  background-color: var(--ecart-main-bg-color);
 }
 
 body {

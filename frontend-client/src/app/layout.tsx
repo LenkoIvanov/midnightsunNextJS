@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import AppFrame from '../pages/AppFrame/AppFrame'
+import "../index.scss";
  
 // Replaces the <head>
 export const metadata: Metadata = {
@@ -12,9 +14,11 @@ export default function RootLayout({
     children: React.ReactNode
   }) {
     return (
-        <html lang="en">
+      <html lang="en">
         <body>
-          <div id="root">{children}</div>
+          <div id="root">
+            <AppFrame children={children} />
+          </div>
         </body>
       </html>
       
