@@ -34,10 +34,10 @@ public class ExternalProductService {
     public void process(Message message) throws IOException {
         //TODO: add error handling
         byte[] body = message.getBody();
-        List<UUID> productIds = objectMapper.readValue(body, new TypeReference<>() {});
+        List<Long> productIds = objectMapper.readValue(body, new TypeReference<>() {});
 
-        Map<UUID, OrderItemExtendedInfoDTO> productIdInfoMap = new HashMap<>();
-        for (UUID id : productIds) {
+        Map<Long, OrderItemExtendedInfoDTO> productIdInfoMap = new HashMap<>();
+        for (Long id : productIds) {
             //TODO: Make batch operation
             final var product = productService.getOne(id);
             final var orderItemExtended = new OrderItemExtendedInfoDTO();

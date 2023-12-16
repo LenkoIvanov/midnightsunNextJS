@@ -1,63 +1,61 @@
 package com.midnightsun.productservice.service;
 
 import com.midnightsun.productservice.mapper.ProductMapper;
+import com.midnightsun.productservice.model.Product;
 import com.midnightsun.productservice.repository.CategoryRepository;
 import com.midnightsun.productservice.repository.ProductRepository;
-import com.midnightsun.productservice.service.cache.PrecomputedCacheService;
-import com.midnightsun.productservice.service.cache.ProductCacheService;
 import com.midnightsun.productservice.service.dto.ProductDTO;
+import com.midnightsun.productservice.service.dto.filter.ProductFilter;
+import com.midnightsun.productservice.service.specification.ProductSpec;
 import com.midnightsun.productservice.web.exception.HttpBadRequestException;
 import com.midnightsun.productservice.web.exception.HttpNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final ProductCacheService productCacheService;
-    private final PrecomputedCacheService precomputedCacheService;
     private final ProductMapper productMapper;
     private final CategoryRepository categoryRepository;
 
     public ProductService(ProductRepository productRepository,
-                          ProductCacheService productCacheService,
-                          PrecomputedCacheService precomputedCacheService, ProductMapper productMapper,
+                          ProductMapper productMapper,
                           CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
-        this.productCacheService = productCacheService;
-        this.precomputedCacheService = precomputedCacheService;
         this.productMapper = productMapper;
         this.categoryRepository = categoryRepository;
     }
 
-    //TODO: Implement solution for getAll using Cache
-    public Page<ProductDTO> getAll(Pageable pageable) {
+    @Transactional
+    public Page<ProductDTO> getAll(Pageable pageable, ProductFilter filter) {
         log.debug("Request to get all PRODUCTS");
-        return productRepository.findAll(pageable).map(productMapper::toDTO);
+        Specification<Product> spec = ProductSpec.filterBy(filter);
+        return productRepository.findAll(spec, pageable)
+                .map(productMapper::toDTO);
     }
 
-    public List<ProductDTO> getTopProducts(Integer n) {
-        log.debug("Request to get top {} PRODUCTS", n);
-        Set<UUID> idOfTopRatedProducts = precomputedCacheService.getIdOfTopRatedProducts((long) n);
-
-        if (idOfTopRatedProducts.isEmpty()) {
-            if (n > 200) n = 200;
-            return getAll(Pageable.ofSize(n)).getContent();
-        }
-
-        return getProductsWithRatings(idOfTopRatedProducts);
+    @Transactional
+    public Page<ProductDTO> getProductsOrderedByAverageRatingScore(Pageable pageable) {
+        log.debug("Request to get PRODUCTS ordered by average rating score");
+        return productRepository.findTopNProducts(pageable)
+                .map(productMapper::toDTO);
     }
 
-    public ProductDTO getOne(UUID id) {
+    @Transactional
+    public ProductDTO getOne(Long id) {
         log.debug("Request to get PRODUCT by ID: {}", id);
-        return productMapper.toDTO(productCacheService.findById(id));
+
+        return productRepository.findById(id)
+                .map(productMapper::toDTO)
+                .orElse(null);
     }
 
     public ProductDTO save(ProductDTO productDTO) {
@@ -67,7 +65,7 @@ public class ProductService {
         if (!categoryRepository.existsById(productDTO.getCategory().getId())) throw new HttpNotFoundException("Category not found!");
 
         final var product = productMapper.toEntity(productDTO);
-        final var savedProduct = productCacheService.save(product);
+        final var savedProduct = productRepository.save(product);
 
         return productMapper.toDTO(savedProduct);
     }
@@ -76,29 +74,29 @@ public class ProductService {
         log.debug("Request to update PRODUCT: {}", productDTO);
 
         if (productDTO.getId() == null) throw new HttpBadRequestException(HttpBadRequestException.ID_NULL);
-        if (!categoryRepository.existsById(productDTO.getCategory().getId())) throw new HttpNotFoundException("Category not found!");
-//        if (!productRepository.existsById(productDTO.getId())) throw new HttpNotFoundException("Product not found");
+        if (productDTO.getCategory() == null || !categoryRepository.existsById(productDTO.getCategory().getId())) throw new HttpNotFoundException("Category not found!");
+        if (!productRepository.existsById(productDTO.getId())) throw new HttpNotFoundException("Product not found");
 
         final var product = productMapper.toEntity(productDTO);
-        final var savedProduct = productCacheService.save(product);
+        final var savedProduct = productRepository.save(product);
 
         return productMapper.toDTO(savedProduct);
     }
 
-    public void delete(UUID id) {
+    public void delete(Long id) {
         log.debug("Request to delete PRODUCT with ID: {}", id);
-        productCacheService.deleteById(id);
+        productRepository.deleteById(id);
     }
 
-    public Map<UUID, Long> checkProductsAvailability(Map<UUID, Long> productsIdQuantityMap) {
+    public Map<Long, Long> checkProductsAvailability(Map<Long, Long> productsIdQuantityMap) {
         List<ProductDTO> productsToSave = new ArrayList<>();
 
-        for (Map.Entry<UUID, Long> entry : productsIdQuantityMap.entrySet()) {
+        for (Map.Entry<Long, Long> entry : productsIdQuantityMap.entrySet()) {
             final var product = getOne(entry.getKey());
 
             if (product == null || (product.getQuantity() - entry.getValue()) < 0) {
-                //TODO: Maybe next line of code is useless
-                entry.setValue(-1L);
+                //TODO: Return a map with all products quantities and where quantity is insufficient return -1
+                //Then later iterate thru this map and write which products are insufficient
                 return null;
             } else {
                 product.setQuantity(product.getQuantity() - entry.getValue());
@@ -108,16 +106,8 @@ public class ProductService {
 
         productsToSave.stream()
                 .map(productMapper::toEntity)
-                .forEach(productCacheService::save);
+                .forEach(productRepository::save);
 
         return productsIdQuantityMap;
-    }
-
-    private List<ProductDTO> getProductsWithRatings(Set<UUID> ids){
-        return productRepository.findAllById(ids)
-                .stream()
-                .map(productMapper::toDTO)
-                .sorted((p1, p2) -> Double.compare(p2.getRatingScore(), p1.getRatingScore()))
-                .collect(Collectors.toList());
     }
 }

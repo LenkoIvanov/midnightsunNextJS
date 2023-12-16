@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE;NON_KEYWORDS=USER;DATABASE_TO_LOWER=TRUE;
+    username: sa
+    password:
+  liquibase:
+    contexts: test
+    change-log: classpath:db/changelog/db.changelog-master.xml
+  rabbitmq:
+    publisher-confirm-type: correlated
+    publisher-returns: true
+
+
+rabbitmq:
+  queues:
+    ps_queue: product-queue
+    ps_reply_queue: reply-product-queue
+    ps_saga_queue: product-saga-queue
+    os_saga_queue: order-saga-queue
+  exchanges:
+    ps_exchange: product-exchange
+    saga_exchange: saga-exchange
+  routings:
+    ps_key: product-routing-key
+    ps_reply_key: product-reply-routing-key
+    ps_saga_key: product-saga-routing-key
+    os_saga_key: order-saga-routing-key

@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ProductDTO extends AbstractAuditingDTO {
 
-    private UUID id;
+    private Long id;
 
     private String name;
 
@@ -34,5 +34,5 @@ public class ProductDTO extends AbstractAuditingDTO {
 
     private Double ratingScore;
 
-    private List<String> reviews;
+    private List<ReviewDTO> reviewList;
 }

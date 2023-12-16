@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryDTO extends AbstractAuditingDTO {
@@ -14,3 +15,4 @@ public class CategoryDTO extends AbstractAuditingDTO {
 
     private String name;
 }
+

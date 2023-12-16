@@ -1,7 +1,0 @@
-insert into review(id, product_id, text, created_by, created_date, last_modified_by, last_modified_date)
-values (nextval('review_sequence_generator'), 1000, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 'system', now(), 'system', now()),
-       (nextval('review_sequence_generator'), 1000, 'Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.', 'system', now(), 'system', now()),
-       (nextval('review_sequence_generator'), 1000, 'It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.', 'system', now(), 'system', now()),
-       (nextval('review_sequence_generator'), 1000, 'It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'system', now(), 'system', now()),
-       (nextval('review_sequence_generator'), 1000, 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ', 'system', now(), 'system', now()),
-       (nextval('review_sequence_generator'), 1000, 'The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.', 'system', now(), 'system', now())

@@ -14,12 +14,6 @@ spring:
   rabbitmq:
     publisher-confirm-type: correlated
     publisher-returns: true
-  redis:
-    database: 0
-    host: localhost
-    port: 6379
-    password: supersafepass!
-    timeout: 2000
   security:
     oauth2:
       resourceserver:

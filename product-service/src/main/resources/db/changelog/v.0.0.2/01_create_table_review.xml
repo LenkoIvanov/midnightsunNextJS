@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="create_table_review" author="ggrigorov">
+        <createTable tableName="review">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="text" type="varchar(1000)"/>
+            <column name="product_id" type="bigint"/>
+
+            <!-- mandatory audit columns -->
+            <column name="created_by" type="varchar(255)"/>
+            <column name="created_date" type="timestamp"/>
+            <column name="last_modified_by" type="varchar(255)"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add_fk_product_to_review" author="ggrigorov">
+        <addForeignKeyConstraint baseTableName="review"
+                                 baseColumnNames="product_id"
+                                 constraintName="fk_product_to_review"
+                                 referencedTableName="product"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="review_sequence_generator" author="ggrigorov">
+        <createSequence sequenceName="review_sequence_generator"
+                        startValue="1000"
+                        incrementBy="1"/>
+    </changeSet>
+</databaseChangeLog>

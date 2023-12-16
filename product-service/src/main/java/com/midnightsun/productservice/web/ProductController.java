@@ -2,15 +2,13 @@ package com.midnightsun.productservice.web;
 
 import com.midnightsun.productservice.service.ProductService;
 import com.midnightsun.productservice.service.dto.ProductDTO;
+import com.midnightsun.productservice.service.dto.filter.ProductFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -24,22 +22,24 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProductDTO>> getAll(Pageable pageable) {
+    public ResponseEntity<Page<ProductDTO>> getAll(Pageable pageable, ProductFilter filter) {
         log.debug("REST request to get all PRODUCTS sorted by {}, page number: {} and page size: {}",
                 pageable.getSort(), pageable.getPageNumber(), pageable.getPageSize());
 
-        final var products = productService.getAll(pageable);
+        final var products = productService.getAll(pageable, filter);
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
     @GetMapping("/top")
-    public ResponseEntity<List<ProductDTO>> getTopProducts(@RequestParam(defaultValue = "5") Integer n) {
-        log.debug("REST request to get top {} PRODUCTS", n);
-        return ResponseEntity.status(HttpStatus.OK).body(productService.getTopProducts(n));
+    public ResponseEntity<Page<ProductDTO>> getTopProducts(Pageable pageable) {
+        log.debug("REST request to get top PRODUCTS ordered by average rating score, page number: {} and page size: {}",
+                pageable.getPageNumber(), pageable.getPageSize());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(productService.getProductsOrderedByAverageRatingScore(pageable));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDTO> getOne(@PathVariable UUID id) {
+    public ResponseEntity<ProductDTO> getOne(@PathVariable Long id) {
         log.debug("REST request to get PRODUCT by ID: {}", id);
         final var product = productService.getOne(id);
         return ResponseEntity.status(HttpStatus.OK).body(product);
@@ -60,7 +60,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         log.debug("REST request to delete PRODUCT with ID: {}", id);
         productService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
